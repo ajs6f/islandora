@@ -65,6 +65,8 @@ class IslandoraTuque {
    *   A Drupal user.
    * @param string $url
    *   The url to the fedora instance.
+   * @param string $sparql_endpoint
+   *   The URL of a SPARQL Query endpoint for this connection.
    */
   public function __construct($user = NULL, $url = NULL, $sparql_endpoint = NULL) {
     if (!isset($user)) {
