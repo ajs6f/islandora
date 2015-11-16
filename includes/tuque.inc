@@ -87,7 +87,12 @@ class IslandoraTuque {
     }
 
     if (!isset($sparql_endpoint)) {
-      $sparql_endpoint = variable_get('islandora_sparql_endpoint', $url);
+      if (variable_get('islandora_sparql_endpoint_externalized', FALSE)) {
+        $sparql_endpoint = variable_get('islandora_sparql_endpoint', $url);
+      }
+      else {
+        $sparql_endpoint = $url;
+      }
     }
 
     if (self::exists()) {
