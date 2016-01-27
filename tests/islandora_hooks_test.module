@@ -10,7 +10,7 @@
  */
 class CustomTuque extends IslandoraTuque {
   
-  public $isCustom = true;
+  public $isCustom = TRUE;
   
   public function __construct($user, $url) {
     parent::__construct($user, $url);
