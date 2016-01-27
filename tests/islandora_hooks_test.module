@@ -6,6 +6,26 @@
  */
 
 /**
+ * For use exclusively with islandora_hooks_test_islandora_replace_tuque_connection().
+ */
+class CustomTuque extends IslandoraTuque {
+  
+  public $isCustom = true;
+  
+  public function __construct($user, $url) {
+    parent::__construct($user, $url);
+  }
+}
+
+/**
+ * Implements islandora_replace_tuque_connection().
+ */
+function islandora_hooks_test_islandora_replace_tuque_connection($user, $url) {
+  return new CustomTuque($user, $url);
+}
+
+
+/**
  * Implements hook_islandora_object_alter().
  */
 function islandora_hooks_test_islandora_object_alter(AbstractObject $object, array &$context) {

@@ -79,6 +79,11 @@ class IslandoraHooksTestCase extends IslandoraWebTestCase {
    * Covers the majority of cases...
    */
   public function testHooks() {
+    
+    // test replacing Tuque connection with custom connection via islandora_replace_tuque_connection()
+    $tuque = islandora_get_tuque_connection(null, null);
+    $this->assert($tuque->isCustom, 'Replaced Tuque object at runtime via islandora_replace_tuque_connection().');
+    
     // Test ingesting with FedoraRepository::ingestObject().
     $object = $this->repository->constructObject('test:testIngestedObjectHook');
     $_SESSION['islandora_hooks']['hook'][ISLANDORA_OBJECT_INGESTED_HOOK] = FALSE;

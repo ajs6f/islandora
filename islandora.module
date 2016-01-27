@@ -40,6 +40,7 @@ define('ISLANDORA_REGENERATE_DERIVATIVES', 'regenerate derivatives for an object
 define('ISLANDORA_REPLACE_DATASTREAM_CONTENT', 'replace a datastream with new content, preserving version history');
 
 // Hooks.
+define('ISLANDORA_REPLACE_TUQUE_CONNECTION', 'islandora_replace_tuque_connection');
 define('ISLANDORA_VIEW_HOOK', 'islandora_view_object');
 define('ISLANDORA_PRINT_HOOK', 'islandora_view_print_object');
 define('ISLANDORA_EDIT_HOOK', 'islandora_edit_object');
@@ -1181,7 +1182,8 @@ function islandora_default_islandora_printer_object($object, $alter) {
 }
 
 /**
- * Just a wrapper around fetchings the IslandoraTuque object.
+ * Fetches a Tuque object. Modules that wish to provide a specialized subclass
+ * of Tuque may implement ISLANDORA_REPLACE_TUQUE_CONNECTION.
  *
  * Includes some very basic error logging.
  *
@@ -1197,14 +1199,23 @@ function islandora_get_tuque_connection($user = NULL, $url = NULL) {
   module_load_include('inc', 'islandora', 'includes/tuque');
   $tuque = &drupal_static(__FUNCTION__);
   if (!$tuque) {
-    if (IslandoraTuque::exists()) {
-      try {
-        $tuque = new IslandoraTuque($user, $url);
-      }
-      catch (Exception $e) {
-        drupal_set_message(t('Unable to connect to the repository %e', array('%e' => $e)), 'error');
-      }
+    // If available, choose the result of an implemented replace_tuque_connection hook.
+    // The method of choice is not defined, because this hook cannot meaningfully be
+    // implemented by more than one module.
+    foreach (module_implements(ISLANDORA_REPLACE_TUQUE_CONNECTION) as $module) {
+      $function = $module . '_' . ISLANDORA_REPLACE_TUQUE_CONNECTION;
+      $tuque = $function($user, $url);
     }
+    if (!$tuque) {
+      if (IslandoraTuque::exists()) {
+        try {
+          $tuque = new IslandoraTuque($user, $url);
+        }
+        catch (Exception $e) {
+          drupal_set_message(t('Unable to connect to the repository %e', array('%e' => $e)), 'error');
+        }
+      }
+  	}
     else {
       return NULL;
     }
