@@ -1199,27 +1199,21 @@ function islandora_get_tuque_connection($user = NULL, $url = NULL) {
   module_load_include('inc', 'islandora', 'includes/tuque');
   $tuque = &drupal_static(__FUNCTION__);
   if (!$tuque) {
+    $tuque = NULL;
     // Choose a result of some implemented ISLANDORA_REPLACE_TUQUE_HOOK.
-    // The order of choice is undefined.
     $tuques = module_invoke_all(ISLANDORA_REPLACE_TUQUE_HOOK, $user, $url);
-    $tuque = reset($tuques);
-    if (!$tuque) {
-      print("No hook-supplied Tuque available.");
-      if (IslandoraTuque::exists()) {
-        try {
-          $tuque = new IslandoraTuque($user, $url);
-        }
-        catch (Exception $e) {
-          drupal_set_message(t('Unable to connect to the repository %e', array('%e' => $e)), 'error');
-        }
-      }
+    if ($tuques) {
+      $tuque = reset($tuques);
     }
-    else {
-      return NULL;
+    if (!$tuque && IslandoraTuque::exists()) {
+      try {
+        $tuque = new IslandoraTuque($user, $url);
+      }
+      catch (Exception $e) {
+        drupal_set_message(t('Unable to connect to the repository %e', array('%e' => $e)), 'error');
+      } 
     }
   }
-  print("islandora_get_tuque_connection is using Tuque:\n");
-  var_dump($tuque);
   return $tuque;
 }
 
