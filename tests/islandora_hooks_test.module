@@ -9,11 +9,12 @@
  * Implements islandora_replace_tuque_connection().
  */
 function islandora_hooks_test_islandora_replace_tuque_connection($user, $url) {
-  print("Creating new Tuque connection for testing.");
+  print("Creating new Tuque connection for testing:");
+  $tuque = new IslandoraTuque($user, $url);
+  var_dump($tuque);
   $_SESSION['islandora_hooks']['hook'][ISLANDORA_REPLACE_TUQUE_HOOK] = TRUE;
-  return new IslandoraTuque($user, $url);
+  return $tuque;
 }
-
 
 /**
  * Implements hook_islandora_object_alter().
