@@ -21,6 +21,7 @@ class CustomTuque extends IslandoraTuque {
  * Implements islandora_replace_tuque_connection().
  */
 function islandora_hooks_test_islandora_replace_tuque_connection($user, $url) {
+  print("Using custom Tuque")
   return new CustomTuque($user, $url);
 }
 
