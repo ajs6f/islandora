@@ -1200,7 +1200,6 @@ function islandora_get_tuque_connection($user = NULL, $url = NULL) {
   $tuque = &drupal_static(__FUNCTION__);
   if (!$tuque) {
     $tuque = NULL;
-    // Choose a result of some implemented ISLANDORA_REPLACE_TUQUE_HOOK.
     $tuques = module_invoke_all(ISLANDORA_REPLACE_TUQUE_HOOK, $user, $url);
     if ($tuques) {
       $tuque = reset($tuques);
