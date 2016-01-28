@@ -1185,7 +1185,7 @@ function islandora_default_islandora_printer_object($object, $alter) {
  * Fetches a Tuque object.
  * 
  * Modules that wish to provide a specialized subclass of Tuque may implement
- * ISLANDORA_REPLACE_TUQUE_CONNECTION. Includes some very basic error logging.
+ * ISLANDORA_REPLACE_TUQUE_HOOK. Includes some very basic error logging.
  *
  * @param object $user
  *   The user to connect as.
@@ -1199,13 +1199,10 @@ function islandora_get_tuque_connection($user = NULL, $url = NULL) {
   module_load_include('inc', 'islandora', 'includes/tuque');
   $tuque = &drupal_static(__FUNCTION__);
   if (!$tuque) {
-    // Choose the result of any implemented replace_tuque_connection hook.
-    // The method of choice is not defined, because this hook cannot be
-    // implemented by more than one module.
-    foreach (module_implements(ISLANDORA_REPLACE_TUQUE_HOOK) as $module) {
-      $function = $module . '_' . ISLANDORA_REPLACE_TUQUE_HOOK;
-      $tuque = $function($user, $url);
-    }
+    // Choose a result of some implemented ISLANDORA_REPLACE_TUQUE_HOOK.
+    // The order of choice is undefined.
+    $tuques = module_invoke_all(ISLANDORA_REPLACE_TUQUE_HOOK, $user, $url);
+    $tuque = reset($tuques);
     if (!$tuque) {
       if (IslandoraTuque::exists()) {
         try {
