@@ -1204,6 +1204,7 @@ function islandora_get_tuque_connection($user = NULL, $url = NULL) {
     $tuques = module_invoke_all(ISLANDORA_REPLACE_TUQUE_HOOK, $user, $url);
     $tuque = reset($tuques);
     if (!$tuque) {
+      print("No hook-supplied Tuque available.");
       if (IslandoraTuque::exists()) {
         try {
           $tuque = new IslandoraTuque($user, $url);
@@ -1217,6 +1218,8 @@ function islandora_get_tuque_connection($user = NULL, $url = NULL) {
       return NULL;
     }
   }
+  print("islandora_get_tuque_connection is using Tuque:\n");
+  var_dump($tuque);
   return $tuque;
 }
 
