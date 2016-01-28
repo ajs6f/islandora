@@ -8,10 +8,10 @@
 /**
  * Implements islandora_replace_tuque_connection().
  */
-function islandora_hooks_test_islandora_replace_tuque_connection($user, $url) {
-  $_SESSION['islandora_hooks']['hook'][ISLANDORA_REPLACE_TUQUE_HOOK] = TRUE;
-  return new IslandoraTuque($user, $url);
-}
+//function islandora_hooks_test_islandora_replace_tuque_connection($user, $url) {
+//  $_SESSION['islandora_hooks']['hook'][ISLANDORA_REPLACE_TUQUE_HOOK] = TRUE;
+//  return new IslandoraTuque($user, $url);
+//}
 
 
 /**
